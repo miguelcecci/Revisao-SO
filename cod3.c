@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<unistd.h>
-#include <sys/wait.h>
+#include<sys/wait.h> //biblioteca da funçao waitpid
 
 int main(void){
   int status;
