@@ -13,7 +13,7 @@ int main(void){
     dup(pfd[0]);
     close(pfd[1]);
     close(pfd[0]);
-    execl("/usr/bin/wc","wc",0);
+    execl("/usr/bin/wc","wc",NULL);
     break;
   }
   switch (fork()) {
@@ -23,7 +23,7 @@ int main(void){
     dup(pfd[1]);
     close(pfd[0]);
     close(pfd[1]);
-    execl("/bin/ls","ls","la",0);
+    execl("/bin/ls","ls","-la",NULL);
     break;
   }
   return 0;
