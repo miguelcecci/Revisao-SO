@@ -26,7 +26,7 @@ int main(void){
     }
 
     i=1; //começa o loop em 1
-    while(i < 20 && (argv[i]=strtok(NULL, " "))){ //esse loop atribui valor nulo ao argv exeto ao argv[0]
+    while(i < 20 && (argv[i]=strtok(NULL, " "))){ //esse loop atribui valor nulo ao argv exeto ao argv[0] obs talvez esse loop possa ser substituido por um memset
       i++;
     }
 
