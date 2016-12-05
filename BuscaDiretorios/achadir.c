@@ -8,19 +8,17 @@ static void lookup(const char *arg)
 {
     DIR *dirpont;
     struct dirent *dp;
-    char cwd[1024];
 
 
-    if ((dirpont = opendir("/")) == NULL) {
+    if ((dirpont = opendir(".")) == NULL) {
         perror("nao pode abrir '.'");
         return;
     }
 
+
     do {
         errno = 0;
         if ((dp = readdir(dirpont)) != NULL) {
-            (void) printf("vai vendo: %s(%d)\n", dp->d_name, dp->d_type);
-              fprintf(stdout, "Current working dir: %s\n", cwd);
             if (strcmp(dp->d_name, arg) != 0)
                 continue;
 
@@ -31,6 +29,7 @@ static void lookup(const char *arg)
 
         }
     } while (dp != NULL);
+
 
     if (errno != 0)
         perror("Erro lendo o diretorio");
@@ -48,7 +47,7 @@ int main(int argc, char *argv[])
     if( argc < 2 ) {
        printf( "USO: %s nome_arquivo ...\n\n", argv[ 0 ] );
        return( -1 );
-    }
+    }    
 
     for (i = 1; i < argc; i++)
         lookup(argv[i]);

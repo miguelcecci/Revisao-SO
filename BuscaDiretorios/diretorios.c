@@ -2,28 +2,40 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <unistd.h>
+int init = 0;
 
 static void lookup(const char *arg)
 {
     DIR *dirpont;
     struct dirent *dp;
-    char *buffer;
+    char *buffer, *cdir="/tmp";
+    int counter = 0;
+    int aux;
 
     if ((dirpont = opendir("/")) == NULL) {
-        perror("nao pode abrir '.'");
+        perror("nao pode abrir '/'");
         return;
     }
+
+    init == 1;
 
     do {
         errno = 0;
         if ((dp = readdir(dirpont)) != NULL){
             if (strcmp(dp->d_name, arg) != 0){
-              if(dp->d_type == 4){
-                chdir(dp->d_name);
+              if(dp->d_type == 4 && strcmp(dp->d_name, "..") != 0){
+                counter++;
+                aux = chdir(cdir);//esse programa ta uma porra
+                if(aux == -1){
+                  printf("ERRO AO TENTAR ABRIR DIRETORIO\n");
+                }else{
+                  printf("abriu\n");
+                }
               }
               if(dp == NULL){
-                chdir("..");
+                counter--;
+                aux = chdir("..");
               }
               (void) printf("vaivendo: %s(%d)\n", dp->d_name, dp->d_type);
               continue;
@@ -33,7 +45,7 @@ static void lookup(const char *arg)
             (void) closedir(dirpont);
                 return;
         }
-    } while (dp != NULL ///////////////////////////==0 );
+    } while (dp != NULL && counter != 0 );
 
 
     if (errno != 0)
