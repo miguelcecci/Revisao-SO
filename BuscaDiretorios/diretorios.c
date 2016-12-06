@@ -3,38 +3,48 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-int init = 0;
+char* path[]={NULL, NULL, NULL, NULL};
 
 static void lookup(const char *arg)
 {
     DIR *dirpont;
     struct dirent *dp;
-    char *buffer, *cdir="/tmp";
+    char *buffer;
     int counter = 0;
     int aux;
+    char aux2[1024];
+
+    memset(aux2, 0, 1024);
 
     if ((dirpont = opendir("/")) == NULL) {
         perror("nao pode abrir '/'");
         return;
     }
 
-    init == 1;
-
     do {
         errno = 0;
         if ((dp = readdir(dirpont)) != NULL){
             if (strcmp(dp->d_name, arg) != 0){
               if(dp->d_type == 4 && strcmp(dp->d_name, "..") != 0){
-                counter++;
-                aux = chdir(cdir);//esse programa ta uma porra
+                path[counter]="/";
+                path[counter+1]=dp->d_name;
+                counter=counter+2;
+                for(int j=0; j<counter; j++){
+                  strcat (aux2, path[j]);
+                }
+
+                aux = chdir(aux2);//esse programa ta uma porra
+
                 if(aux == -1){
                   printf("ERRO AO TENTAR ABRIR DIRETORIO\n");
-                }else{
-                  printf("abriu\n");
+                  printf("olha esta bosta -> %s\n", aux2);
                 }
+
               }
               if(dp == NULL){
-                counter--;
+                path[counter]=NULL;
+                path[counter+1]=NULL;
+                counter=counter-2;
                 aux = chdir("..");
               }
               (void) printf("vaivendo: %s(%d)\n", dp->d_name, dp->d_type);
